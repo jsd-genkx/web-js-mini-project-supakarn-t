@@ -14,34 +14,43 @@ let inventory = [
 	},
 ];
 
-// -------------------- Adding a Product -------------------- //
-// need log error when entering incomplete values ​​or duplicate ID.
+// ---------------------------------------- Adding a Product ---------------------------------------- //
 
-addProduct = (name, category, price, stock) => {
+const addProduct = (productName, category, price, stock) => {
 	// auto assign id
-	let newId = inventory.reduce((acc, value) => {
-		return (acc = value.productId + 1);
+	let newProductId = inventory.reduce((update_value, each_value) => {
+		return (update_value = each_value.productId + 1);
 	}, 0);
 
-	if (!name || !category || !price || !stock) {
+	if (!productName || !category || !price || !stock) {
 		console.log("Please fill in completely, not 0, and empty.");
 	} else {
 		inventory.push({
-			productId: newId,
-			productName: name,
-			category: category,
-			price: price,
-			stock: stock,
+			productId: newProductId,
+			productName,
+			category,
+			price,
+			stock,
 		});
-		console.log(inventory);
+		console.log(`${productName} is already added to the inventory`);
 	}
 };
 
-// -------------------- Finding a Product -------------------- //
-// need log error when the product doesn't exist in the inventory.
+// ---------------------------------------- Finding a Product ---------------------------------------- //
 
-// -------------------- Updating Stock -------------------- //
+const findProduct = (productName) => {
+	const product = inventory.find(
+		(item) => item.productName.toLowerCase() == productName.toLowerCase()
+	);
+	if (!product) {
+		console.log(`${productName} doesn't exist in the inventory.`);
+	} else {
+		console.log(product);
+	}
+};
+
+// ---------------------------------------- Updating Stock ---------------------------------------- //
 // need log error when error handling with validation such as 'enter the wrong product_id' or 'update stock < 0
 
-// -------------------- Deleting Product -------------------- //
+// ---------------------------------------- Deleting Product ---------------------------------------- //
 // need confirm message when successful deleted
