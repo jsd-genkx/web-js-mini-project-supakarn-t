@@ -19,25 +19,21 @@ let inventory = [
 
 addProduct = (name, category, price, stock) => {
 	// auto assign id
-	let newID = inventory.reduce((acc, value) => {
+	let newId = inventory.reduce((acc, value) => {
 		return (acc = value.productId + 1);
 	}, 0);
 
-	if (
-		name === undefined ||
-		category === undefined ||
-		price === undefined ||
-		stock === undefined
-	) {
-		console.log("Please fill in completely.");
+	if (!name || !category || !price || !stock) {
+		console.log("Please fill in completely, not 0, and empty.");
 	} else {
 		inventory.push({
-			productId: newID,
+			productId: newId,
 			productName: name,
 			category: category,
 			price: price,
 			stock: stock,
 		});
+		console.log(inventory);
 	}
 };
 
