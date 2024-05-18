@@ -15,7 +15,7 @@ let inventory = [
 ];
 
 // ---------------------------------------- Adding a Product ---------------------------------------- //
-
+// log error when entering incomplete values ​​or duplicate ID.
 const addProduct = (productName, category, price, stock) => {
 	// auto assign id
 	let newProductId = inventory.reduce((update_value, each_value) => {
@@ -23,34 +23,83 @@ const addProduct = (productName, category, price, stock) => {
 	}, 0);
 
 	if (!productName || !category || !price || !stock) {
-		console.log("Please fill in completely, not 0, and empty.");
-	} else {
-		inventory.push({
-			productId: newProductId,
-			productName,
-			category,
-			price,
-			stock,
-		});
-		console.log(`${productName} is already added to the inventory`);
+		return console.log("Please fill in completely, not 0, and empty.");
 	}
+	inventory.push({
+		productId: newProductId,
+		productName,
+		category,
+		price,
+		stock,
+	});
+	console.log(`The ${productName} has already been added to the inventory.`);
 };
+// addProduct("banana", 1, 0.99, 50);
 
 // ---------------------------------------- Finding a Product ---------------------------------------- //
-
-const findProduct = (productName) => {
-	const product = inventory.find(
-		(item) => item.productName.toLowerCase() == productName.toLowerCase()
+// log error when the product doesn't exist in the inventory.
+const findProduct = (productIdOrName) => {
+	const product = inventory.find((item) =>
+		typeof productIdOrName === "number"
+			? item.productId === productIdOrName
+			: item.productName.toLowerCase() === productIdOrName.toLowerCase()
 	);
 	if (!product) {
-		console.log(`${productName} doesn't exist in the inventory.`);
-	} else {
-		console.log(product);
+		typeof productIdOrName === "number"
+			? console.log(
+					`The product ID ${productIdOrName} doesn't exist in the inventory.`
+			  )
+			: console.log(
+					`The product name ${productIdOrName} doesn't exist in the inventory.`
+			  );
+	}
+	if (product) {
+		return product;
 	}
 };
+const showFindProduct = (productIdOrName) => {
+	const product = findProduct(productIdOrName);
+	if (product) {
+		console.log(findProduct(productIdOrName));
+	}
+};
+// showFindProduct(2);
+// showFindProduct(3);
+// showFindProduct("orange juice");
+// showFindProduct("orange");
 
 // ---------------------------------------- Updating Stock ---------------------------------------- //
-// need log error when error handling with validation such as 'enter the wrong product_id' or 'update stock < 0
+// log error when error handling with validation such as 'enter the wrong product_id' or 'update stock < 0
+const updateStock = (productId, stock) => {
+	if (stock < 0) {
+		return console.log("Error! product stock can't be negative.");
+	}
+	const product = findProduct(productId);
+	if (product) {
+		const oldStock = product.stock;
+		product.stock = stock;
+		console.log(
+			`The product ID ${productId} (${product.productName}) stock has already been updated from ${oldStock} to ${stock}.`
+		);
+	}
+};
+// updateStock(2, 20);
+// updateStock(2, +20);
+// updateStock(3, -20);
 
 // ---------------------------------------- Deleting Product ---------------------------------------- //
 // need confirm message when successful deleted
+const deleteProduct = (productID) => {
+	if (typeof productID !== "number") {
+		return console.log("The product ID is invalid.");
+	}
+
+	const product = findProduct(productID);
+	if (product) {
+		inventory.splice(productID - 1, 1);
+		console.log(`The product ID ${productID} was deleted.`);
+	}
+};
+// deleteProduct(1);
+// deleteProduct(3);
+// console.log(inventory);
